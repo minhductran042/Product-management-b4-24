@@ -7,7 +7,7 @@ module.exports.index = async (req,res) => {
     }
     // find.status = "active";
 
-    if(req.query.status){
+    if(req.query.status){ 
         find.status = req.query.status;
     }
 
