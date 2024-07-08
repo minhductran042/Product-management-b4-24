@@ -7,6 +7,21 @@ module.exports.index = async (req,res) => {
     }
     // find.status = "active";
 
+    const filterStatus = [
+        {
+            label: "Tất cả",
+            value: ""
+        }, 
+        {
+            label: "Hoạt động",
+            value: "active"
+        },
+        {
+            label: "Dừng hoạt động",
+            value: "inactive"
+        }
+    ];
+
     //
     if(req.query.status){ 
         find.status = req.query.status;
@@ -27,6 +42,7 @@ module.exports.index = async (req,res) => {
     res.render("admin/pages/products/index", {
         pageTitle: "Quản lí sản phẩm",
         products: products,
-        keyword: keyword
+        keyword: keyword,
+        filterStatus : filterStatus
     });
 }
