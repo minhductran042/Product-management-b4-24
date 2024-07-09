@@ -34,8 +34,31 @@ module.exports.index = async (req,res) => {
         find.title = regex;
         keyword = req.query.keyword;
     }
+    //Het tim kiem 
 
-    const products = await Product.find(find);
+
+    //Phan trang
+    const pagination = {
+        currentPage: 1,
+        limitedItem: 4,
+    };
+    if(req.query.page){
+        pagination.currentPage = parseInt(req.query.page);
+    }
+    
+    pagination.skip = (pagination.currentPage - 1) * pagination.limitedItem;
+    
+    const countProducts = await Product.countDocuments(find);
+    const totalPage = Math.ceil(countProducts / pagination.limitedItem);
+    
+    pagination.totalPage = totalPage;
+    
+    //Het Phan Trang
+
+    const products = await Product
+        .find(find)
+        .limit(pagination.limitedItem)
+        .skip(pagination.skip);
 
     console.log(products);
 
@@ -43,6 +66,7 @@ module.exports.index = async (req,res) => {
         pageTitle: "Quản lí sản phẩm",
         products: products,
         keyword: keyword,
-        filterStatus : filterStatus
+        filterStatus : filterStatus,
+        pagination: pagination
     });
 }
