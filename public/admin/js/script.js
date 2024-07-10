@@ -33,7 +33,8 @@ if(listButtonStatus.length > 0){
 
 //form Search 
 
-const formSearch = document.querySelector("[form-search]")
+const formSearch = document.querySelector("[form-search]");
+
 if(formSearch){
     let url = new URL(window.location.href)
     formSearch.addEventListener("submit",(event) => {
@@ -51,3 +52,21 @@ if(formSearch){
 }
 
 //end form search
+
+//Phan trang
+
+const listButtonPagination = document.querySelectorAll("[button-pagination");
+if(listButtonPagination.length > 0){
+    listButtonPagination.forEach(button => {
+        button.addEventListener("click", () =>{
+            const page = button.getAttribute("button-pagination");
+            
+            let url = new URL(window.location.href);
+            
+            url.searchParams.set("page",page);
+
+            window.location.href = url.href;
+        });
+        
+    });
+}
