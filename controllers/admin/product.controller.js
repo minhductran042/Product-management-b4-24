@@ -60,15 +60,16 @@ module.exports.index = async (req,res) => {
     });
 }
 
-// [GET] /admin/products/change-status/:statusChange/:id
+// [PATCH] /admin/products/change-status/:statusChange/:id
 
 module.exports.changeStatus = async (req,res) => {
-    const { id, statusChange} = req.params;
-    await  Product.updateOne({
+    const { id, statusChange } = req.params;
+    await  Product.updateOne( {
         _id: id
     },{status: statusChange});
 
-    res.redirect('back');
-
-    
+    res.json({
+        code: 200 // backend trả về code 200 
+    });
+   
 }

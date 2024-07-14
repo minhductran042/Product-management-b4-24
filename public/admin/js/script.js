@@ -70,3 +70,75 @@ if(listButtonPagination.length > 0){
         
     });
 }
+
+
+//end phan trang
+
+
+//Button Change Status
+
+
+const listButtonChangeStatus = document.querySelectorAll("[button-change-status]");
+if(listButtonChangeStatus.length > 0) {
+  listButtonChangeStatus.forEach(button => {
+    button.addEventListener("click", () => {
+      const link = button.getAttribute("link");
+      fetch(link, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.code == 200) {
+          window.location.reload();
+        }
+      })
+  });
+});
+}
+
+//end Button Change Status
+
+
+
+//Check Item
+
+const inputCheckAll = document.querySelector("input[name='checkall']");
+
+if(inputCheckAll){
+    const listInputCheckItem = document.querySelectorAll("input[name='checkItem']");
+
+    //Bat su kien click vao nut checkAll
+    inputCheckAll.addEventListener("click", () => {
+        console.log(inputCheckAll.checked); // checked tra ra true, false
+        listInputCheckItem.forEach(inputCheckItem => {
+            inputCheckItem.checked = inputCheckAll.checked;
+        }); 
+    });
+
+    //Bat su kien click vao nut checkItem
+
+    listInputCheckItem.forEach(inputCheckItem => {
+        inputCheckItem.addEventListener("click", () => {
+            const listInputCheckItemChecked = document.querySelectorAll("input[name='checkItem']:checked");
+            console.log(listInputCheckItemChecked.length);
+            console.log(listInputCheckItem.length);
+
+            if(listInputCheckItemChecked.length == listInputCheckItem.length){
+                inputCheckAll.checked = true;
+            }
+            else{
+                inputCheckAll.checked = false;
+            }
+        });
+    })
+    
+
+
+}
+
+    
+
+//End check Item
