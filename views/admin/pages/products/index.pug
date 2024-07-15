@@ -15,7 +15,25 @@ block main
           +filter-status(filterStatus)
         .col-6
           +search(keyword)
-      
+
+
+  .card.mb-3
+    .card-header Hành động
+    .card-body 
+      .input-group()
+        div(class="input-group" box-actions)
+          select(class="custom-select" )
+            option(selected='') Chọn hành động...
+            option(value='active') Hoạt động
+            option(value='inactive') Dừng hoạt động
+          .input-group-append 
+            button(
+              class = "btn.btn-outline-secondary"
+              type='button'
+            ) Áp dụng
+
+
+    
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
     .card-body
@@ -34,9 +52,12 @@ block main
         tbody
           each item,index in products
             tr 
-              
               td 
-                input(name="checkItem" type="checkbox")
+                input(
+                  name="checkItem" 
+                  type="checkbox"
+                  value= item.id
+                )
               td #{index+1}
               td
                 img(

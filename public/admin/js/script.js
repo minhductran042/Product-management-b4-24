@@ -112,7 +112,6 @@ if(inputCheckAll){
 
     //Bat su kien click vao nut checkAll
     inputCheckAll.addEventListener("click", () => {
-        console.log(inputCheckAll.checked); // checked tra ra true, false
         listInputCheckItem.forEach(inputCheckItem => {
             inputCheckItem.checked = inputCheckAll.checked;
         }); 
@@ -123,8 +122,8 @@ if(inputCheckAll){
     listInputCheckItem.forEach(inputCheckItem => {
         inputCheckItem.addEventListener("click", () => {
             const listInputCheckItemChecked = document.querySelectorAll("input[name='checkItem']:checked");
-            console.log(listInputCheckItemChecked.length);
-            console.log(listInputCheckItem.length);
+            // console.log(listInputCheckItemChecked.length);
+            // console.log(listInputCheckItem.length);
 
             if(listInputCheckItemChecked.length == listInputCheckItem.length){
                 inputCheckAll.checked = true;
@@ -133,12 +132,52 @@ if(inputCheckAll){
                 inputCheckAll.checked = false;
             }
         });
-    })
+    });
     
-
-
 }
 
-    
 
 //End check Item
+
+
+//Box Actions
+
+const boxActions = document.querySelector("[box-actions]");
+if(boxActions){
+    const button = boxActions.querySelector("button");
+    button.addEventListener("click",() => {
+        const select = boxActions.querySelector("select");
+        const status = select.value;
+        
+        const listInputChecked = document.querySelectorAll("input[name='checkItem']:checked");
+        
+        const ids = [];
+        listInputChecked.forEach(input => {
+            ids.push(input.value);
+        });
+
+        
+
+        if(status != "" && ids.length >0){
+            const dataChangeMulti = {
+                status: status,
+                ids: ids
+            }
+            fetch("/admin/products/change-multi", {
+                method: "PATCH",
+                header: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataChangeMulti)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.code == 200){
+                        window.location.reload();
+                    }
+                })
+        } else{
+            alert("Hành động và checkItem phải được chọn");
+        }
+    });
+}

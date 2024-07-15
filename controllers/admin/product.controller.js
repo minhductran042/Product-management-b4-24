@@ -73,3 +73,17 @@ module.exports.changeStatus = async (req,res) => {
     });
    
 }
+
+
+// [PATCH] /admin/products/change-multi
+module.exports.changeMulti = async (req,res) => {
+    const { id, statusChange } = req.params;
+    await  Product.updateOne( {
+        _id: id
+    },{status: statusChange});
+
+    res.json({
+        code: 200 // backend trả về code 200 
+    });
+   
+}
