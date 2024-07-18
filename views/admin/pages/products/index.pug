@@ -2,6 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
+include ../../mixins/box-actions.pug
 
 
 block main
@@ -9,10 +10,10 @@ block main
 
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
-    .card-body
+    .card-body 
       .row
         .col-6
-          +filter-status(filterStatus)
+          +filter-status(filterStatus)  
         .col-6
           +search(keyword)
 
@@ -21,16 +22,7 @@ block main
     .card-header Hành động
     .card-body 
       .input-group()
-        div(class="input-group" box-actions)
-          select(class="custom-select" )
-            option(value='') Chọn hành động...
-            option(value='active') Hoạt động
-            option(value='inactive') Dừng hoạt động
-          .input-group-append 
-            button(
-              class = "btn.btn-outline-secondary"
-              type='button'
-            ) Áp dụng
+        +box-actions(`/${prefixAdmin}/products/change-multi`)
 
 
     
@@ -83,7 +75,10 @@ block main
                   ) Dừng hoạt động  
               td
                 button(class="btn btn-warning btn-sm") Sửa
-                button(class="btn btn-danger btn-sm ml-1") Xóa
+                button(
+                  class="btn btn-danger btn-sm ml-1"
+                  button-delete= item.id
+                ) Xóa
 
   
   +pagination(pagination)  

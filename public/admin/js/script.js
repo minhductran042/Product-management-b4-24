@@ -162,7 +162,9 @@ if(boxActions) {
         ids: ids
       };
 
-      fetch("/admin/products/change-multi", {
+      const link = boxActions.getAttribute("box-actions");
+
+      fetch(link, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -180,3 +182,29 @@ if(boxActions) {
     }
   });
 }
+
+//End boxActions
+
+
+// Xóa bản ghi
+
+const listButtonDelete = document.querySelectorAll("[button-delete]");
+if(listButtonDelete.length > 0) {
+  listButtonDelete.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-delete");
+      console.log(id);
+
+      fetch(`/admin/products/delete/${id}`, {
+        method: "DELETE"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+//End Xóa bản ghi
