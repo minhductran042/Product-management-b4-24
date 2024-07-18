@@ -1,6 +1,8 @@
 const Product = require("../../models/product.model");
 const paginationHelper = require("../../helpers/pagination.helper");
 
+
+
 // [GET] /admin/products/
 module.exports.index = async (req,res) => {
 
@@ -77,11 +79,18 @@ module.exports.changeStatus = async (req,res) => {
 
 // [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req,res) => {
-    const { id, statusChange } = req.params;
-    await  Product.updateOne( {
-        _id: id
-    },{status: statusChange});
 
+    const {status , ids} = req.body;
+
+
+    await  Product.updateMany( {
+        _id: ids
+    },{
+        status: status
+    });
+
+    
+    
     res.json({
         code: 200 // backend trả về code 200 
     });

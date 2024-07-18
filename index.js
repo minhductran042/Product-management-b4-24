@@ -2,6 +2,8 @@ const express = require('express');
 
 require('dotenv').config();
 
+const bodyParser = require('body-parser');
+
 const routeAdmin = require("./routers/admin/index.route");
 const routeClient = require("./routers/client/index.route");
 const systemConfig = require("./config/system");
@@ -18,6 +20,8 @@ app.set("views","./views");
 app.set("view engine","pug");
 
 app.use(express.static('public'));
+
+app.use(bodyParser.json());
 
 //App Local Variable
 
