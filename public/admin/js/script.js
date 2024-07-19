@@ -196,7 +196,7 @@ if(listButtonDelete.length > 0) {
       console.log(id);
 
       fetch(`/admin/products/delete/${id}`, {
-        method: "DELETE"
+        method: "PATCH"
       })
         .then(res => res.json())
         .then(data => {
@@ -208,3 +208,54 @@ if(listButtonDelete.length > 0) {
   });
 }
 //End Xóa bản ghi
+
+
+//Thung rac
+
+  //Khoi phuc ban ghi
+
+const listButtonRestore = document.querySelectorAll("[button-restore]");
+if(listButtonRestore.length > 0) {
+  listButtonRestore.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-restore");
+      
+
+      fetch(`/admin/products/restore/${id}`, {
+        method: "PATCH"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+  //End khoi phuc ban ghi
+
+
+
+  //Xoa vinh Vien
+const listButtonFullyDelete = document.querySelectorAll("[button-permanently-delete]");
+if(listButtonFullyDelete.length > 0) {
+  listButtonFullyDelete.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-permanently-delete");
+
+      fetch(`/admin/products/permanentlyDelete/${id}`, {
+        method: "DELETE"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+  //End xóa vĩnh viễn
+
+//End thung rac

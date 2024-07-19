@@ -6,9 +6,7 @@ include ../../mixins/box-actions.pug
 
 
 block main
-  h1(class="mb-4") Quản lý sản phẩm
-
-  a(href="/admin/products/trash") Trang Thùng Rác 
+  h1(class="mb-4") Trang thùng rác
 
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
@@ -19,13 +17,6 @@ block main
         .col-6
           +search(keyword)
 
-
-  .card.mb-3
-    .card-header Hành động
-    .card-body 
-      .input-group()
-        +box-actions(`/${prefixAdmin}/products/change-multi`)
-
   
     
   .card.mb-3
@@ -34,8 +25,6 @@ block main
       table.table.table-hover.table-sm
         thead
           tr
-            th 
-              input(name="checkall" type="checkbox")
             th STT
             th Hình ảnh
             th Tiêu đề
@@ -46,12 +35,6 @@ block main
         tbody
           each item,index in products
             tr 
-              td 
-                input(
-                  name="checkItem" 
-                  type="checkbox"
-                  value= item.id
-                )
               td #{index+1}
               td
                 img(
@@ -76,11 +59,15 @@ block main
                     button-change-status
                   ) Dừng hoạt động  
               td
-                button(class="btn btn-warning btn-sm") Sửa
+                button(
+                    class="btn btn-warning btn-sm"
+                    button-restore = item.id
+                ) Khôi phục
+
                 button(
                   class="btn btn-danger btn-sm ml-1"
-                  button-delete= item.id
-                ) Xóa
+                  button-permanently-delete= item.id
+                ) Xóa vĩnh viễn
 
   
   +pagination(pagination)  

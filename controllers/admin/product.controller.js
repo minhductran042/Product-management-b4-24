@@ -96,13 +96,105 @@ module.exports.changeMulti = async (req,res) => {
     });
    
 }
-
+// [DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req,res) => {
     const id = req.params.id;
 
-    await Product.deleteOne({
-        _id: id
+   await Product.updateOne({
+    _id: id
+   }, {
+    deleted: true
+   });
+
+    res.json({
+        code: 200
     });
+
+}
+
+// [GET] /admin/products/trash
+module.exports.trash = async (req,res) => {
+    const find = {
+        deleted: true,
+    }
+    // find.status = "active";
+
+    const filterStatus = [
+        {
+            label: "Tất cả",
+            value: ""
+        }, 
+        {
+            label: "Hoạt động",
+            value: "active"
+        },
+        {
+            label: "Dừng hoạt động",
+            value: "inactive"
+        }
+    ];
+
+    //
+    if(req.query.status){ 
+        find.status = req.query.status;
+    }
+
+    //Tim kiem
+    let keyword = "";
+    if(req.query.keyword){
+        const regex = new RegExp(req.query.keyword,"i");
+        find.title = regex;
+        keyword = req.query.keyword;
+    }
+    //Het tim kiem 
+
+
+    //Phan trang
+    const pagination = await paginationHelper(req, find); 
+    
+    //Het Phan Trang
+
+    const products = await Product
+        .find(find)
+        .limit(pagination.limitItems)
+        .skip(pagination.skip);
+
+    console.log(products);
+
+    res.render("admin/pages/products/trash", {
+        pageTitle: "Quản lí sản phẩm",
+        products: products,
+        keyword: keyword,
+        filterStatus : filterStatus,
+        pagination: pagination
+    });
+}
+
+// [PATCH] /admin/products/restore
+module.exports.restoreItem = async (req,res) => {
+
+    const id = req.params.id;
+
+   await Product.updateOne({
+    _id: id
+   }, {
+    deleted: false
+   });
+
+    res.json({
+        code: 200
+    });
+
+}
+
+// [DELETE] /admin/products/restore
+module.exports.permanentlyDelete = async (req,res) => {
+
+    const id = req.params.id;
+
+   await Product.deleteOne({
+    _id: id
+   });
 
     res.json({
         code: 200
