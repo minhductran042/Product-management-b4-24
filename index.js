@@ -3,10 +3,14 @@ const express = require('express');
 require('dotenv').config();
 
 const bodyParser = require('body-parser');
+const flash = require('express-flash');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const routeAdmin = require("./routers/admin/index.route");
 const routeClient = require("./routers/client/index.route");
 const systemConfig = require("./config/system");
+
 
 const database = require('./config/database');
 database.connect();
@@ -22,6 +26,11 @@ app.set("view engine","pug");
 app.use(express.static('public'));
 
 app.use(bodyParser.json());
+
+//Flash
+app.use(cookieParser('afkdfj'));
+app.use(session({cookie: { maxAge: 60000}}));
+app.use(flash());
 
 //App Local Variable
 

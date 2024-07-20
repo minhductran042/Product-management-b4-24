@@ -68,9 +68,14 @@ module.exports.index = async (req,res) => {
 
 module.exports.changeStatus = async (req,res) => {
     const { id, statusChange } = req.params;
-    await  Product.updateOne( {
+    await  Product.updateOne( 
+    {
         _id: id
-    },{status: statusChange});
+    }, {
+        status: statusChange
+    });
+
+    req.flash('success','Cập nhật trạng thái thành công');
 
     res.json({
         code: 200 // backend trả về code 200 
