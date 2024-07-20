@@ -17,5 +17,7 @@ router.patch("/restore/:id",controller.restoreItem);
 
 router.delete("/permanentlyDelete/:id",controller.permanentlyDelete);
 
+router.patch("/changePosition/:id",controller.changePosition)
+
 
 module.exports = router;

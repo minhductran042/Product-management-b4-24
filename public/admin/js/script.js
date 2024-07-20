@@ -192,10 +192,12 @@ const listButtonDelete = document.querySelectorAll("[button-delete]");
 if(listButtonDelete.length > 0) {
   listButtonDelete.forEach(button => {
     button.addEventListener("click", () => {
-      const id = button.getAttribute("button-delete");
-      console.log(id);
+      
+      // console.log(id);
 
-      fetch(`/admin/products/delete/${id}`, {
+      const link = button.getAttribute("button-delete");
+
+      fetch(link, {
         method: "PATCH"
       })
         .then(res => res.json())
@@ -259,3 +261,31 @@ if(listButtonFullyDelete.length > 0) {
   //End xóa vĩnh viễn
 
 //End thung rac
+
+
+const listInputPosition = document.querySelectorAll("input[name='position']");
+if(listInputPosition.length > 0){
+  listInputPosition.forEach(input => {
+    input.addEventListener("change",() => {
+      const position = parseInt(input.value);
+      const link = input.getAttribute("link");
+
+      // console.log(position);
+      // console.log(link);
+      
+      fetch(link,{
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          position: position
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+        })
+    });
+  });
+}

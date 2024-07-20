@@ -49,8 +49,10 @@ module.exports.index = async (req,res) => {
     const products = await Product
         .find(find)
         .limit(pagination.limitItems)
-        .skip(pagination.skip);
-
+        .skip(pagination.skip)
+        .sort({
+        position: "desc"
+        });
     console.log(products);
 
     res.render("admin/pages/products/index", {
@@ -82,15 +84,26 @@ module.exports.changeMulti = async (req,res) => {
 
     const {status , ids} = req.body;
 
+    switch(status) {
+        case "active":
+        case "inactive":
+            await  Product.updateMany( {
+                _id: ids
+            }, {
+                status: status
+            });
+            break;
+        case "delete":
+            await  Product.updateMany( {
+                _id: ids
+            }, {
+                deleted: true
+            });
+            break;
+        default:
+            break;
+    }
 
-    await  Product.updateMany( {
-        _id: ids
-    },{
-        status: status
-    });
-
-    
-    
     res.json({
         code: 200 // backend trả về code 200 
     });
@@ -170,7 +183,7 @@ module.exports.trash = async (req,res) => {
     });
 }
 
-// [PATCH] /admin/products/restore
+// [PATCH] /admin/products/restore/:id
 module.exports.restoreItem = async (req,res) => {
 
     const id = req.params.id;
@@ -187,7 +200,7 @@ module.exports.restoreItem = async (req,res) => {
 
 }
 
-// [DELETE] /admin/products/restore
+// [DELETE] /admin/products/delete/:id
 module.exports.permanentlyDelete = async (req,res) => {
 
     const id = req.params.id;
@@ -201,3 +214,29 @@ module.exports.permanentlyDelete = async (req,res) => {
     });
 
 }
+
+
+module.exports.changePosition = async (req,res) => {
+
+    const id = req.params.id;
+
+    // await Product.deleteOne({
+    //  _id: id
+    // });
+
+    const position = req.body.position;
+
+    // console.log(id);
+    // console.log(position);
+
+    await Product.updateOne({
+        _id: id
+    }, {
+        position: position
+    })
+ 
+     res.json({
+         code: 200
+     });
+ 
+};

@@ -40,6 +40,7 @@ block main
             th Hình ảnh
             th Tiêu đề
             th Giá
+            th Vị trí
             th Trạng thái
             th Hành động
 
@@ -61,7 +62,16 @@ block main
                   height="auto"
                 )
               td #{item.title}
-              td #{item.price}
+              td #{item.price}$
+              td 
+                input(
+                  link = `/${prefixAdmin}/products/changePosition/${item.id}` 
+                  type = "number"
+                  name = "position"
+                  value = item.position
+                  style="width: 60px"
+                  min = "1"
+                )
               td
                 if(item.status == "active")
                   button(
@@ -79,7 +89,7 @@ block main
                 button(class="btn btn-warning btn-sm") Sửa
                 button(
                   class="btn btn-danger btn-sm ml-1"
-                  button-delete= item.id
+                  button-delete= `/${prefixAdmin}/products/delete/${item.id}`
                 ) Xóa
 
   
