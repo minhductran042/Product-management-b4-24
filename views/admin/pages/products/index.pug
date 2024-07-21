@@ -15,7 +15,7 @@ block main
 
   h1(class="mb-4") Quản lý sản phẩm
 
-  a(href="/admin/products/trash") Trang Thùng Rác 
+  a(class = "btn btn-primary" href="/admin/products/trash" role="button") Trang Thùng Rác 
 
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
@@ -37,7 +37,14 @@ block main
     
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
-    .card-body
+    .card-body 
+
+      div(class = "text-right mb-2")
+        a(
+          href=`/${prefixAdmin}/products/create`
+          class ="btn btn-outline-success"
+        ) + Thêm mới
+
       table.table.table-hover.table-sm
         thead
           tr

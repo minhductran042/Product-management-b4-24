@@ -1,6 +1,6 @@
 const Product = require("../../models/product.model");
 const paginationHelper = require("../../helpers/pagination.helper");
-
+const systemConfig = require("../../config/system");
 
 
 // [GET] /admin/products/
@@ -124,11 +124,17 @@ module.exports.deleteItem = async (req,res) => {
     deleted: true
    });
 
+   req.flash('success','Xóa sản phẩm thành công');
     res.json({
         code: 200
     });
 
 }
+
+
+
+
+
 
 // [GET] /admin/products/trash
 module.exports.trash = async (req,res) => {
@@ -245,3 +251,36 @@ module.exports.changePosition = async (req,res) => {
      });
  
 };
+
+
+// [GET] /products/create
+
+module.exports.create = async (req,res) => {
+
+    res.render("admin/pages/products/create", {
+        pageTitle: "Thêm mới sản phẩm"
+    });
+}
+
+module.exports.createPost = async (req,res) => {
+
+   req.body.price = parseInt(req.body.price);
+   req.body.discountPercentage = parseInt(req.body.discountPercentage);
+   req.body.stock = parseInt(req.body.stock);
+   req.body.position = parseInt(req.body.position);
+
+
+   if(req.body.position){
+    req.body.position = parseInt(req.body.position);
+   }
+   else {
+    const countProduct  = await Product.countDocuments(); 
+    req.body.position = countProduct + 1;    
+   }
+
+   const newProduct = new Product(req.body);
+   await newProduct.save();
+
+
+   res.redirect(`/${systemConfig.prefixAdmin}/products`);
+}

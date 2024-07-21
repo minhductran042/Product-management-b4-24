@@ -27,6 +27,8 @@ app.use(express.static('public'));
 
 app.use(bodyParser.json());
 
+app.use(bodyParser.urlencoded({ extended: false }));
+
 //Flash
 app.use(cookieParser('afkdfj'));
 app.use(session({cookie: { maxAge: 60000}}));
