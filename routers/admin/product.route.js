@@ -29,6 +29,6 @@ router.post(
     "/create", 
     upload.single('thumbnail'), 
     controller.createPost
-  );
+);
 
 module.exports = router;
