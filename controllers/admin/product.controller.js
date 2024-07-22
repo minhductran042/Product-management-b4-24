@@ -278,6 +278,8 @@ module.exports.createPost = async (req,res) => {
     req.body.position = countProduct + 1;    
    }
 
+    
+
    const newProduct = new Product(req.body);
    await newProduct.save();
 
