@@ -7,12 +7,7 @@ include ../../mixins/box-actions.pug
 
 block main
 
-  - if(messages.success)
-    div(
-      class = "alert alert-success show-alert"
-      show-alert = "3000"
-    ) #{messages.success}
-
+  
   h1(class="mb-4") Quản lý sản phẩm
 
   a(class = "btn btn-primary" href="/admin/products/trash" role="button") Trang Thùng Rác 

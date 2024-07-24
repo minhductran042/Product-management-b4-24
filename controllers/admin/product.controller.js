@@ -264,9 +264,10 @@ module.exports.create = async (req,res) => {
 
 module.exports.createPost = async (req,res) => {
 
+   
     // console.log(req.file);
 
-    if(req.file && req.file.filename){
+    if(req.file && req.file.filename) {
         req.body.thumnail = `/uploads/${req.file.filename}`;
     }
 
