@@ -34,4 +34,15 @@ router.post(
     controller.createPost  
 );
 
+router.get("/edit/:id",controller.edit);
+
+router.patch(
+    "/edit/:id", 
+    upload.single('thumbnail'), // up anh vao thu muc upload
+    validate.createPost,
+    controller.editPatch
+);
+
+
+
 module.exports = router;

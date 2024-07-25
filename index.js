@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const methodOverride = require('method-override')
 
 const routeAdmin = require("./routers/admin/index.route");
 const routeClient = require("./routers/client/index.route");
@@ -33,6 +34,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('afkdfj'));
 app.use(session({cookie: { maxAge: 60000}}));
 app.use(flash());
+
+//method-override
+app.use(methodOverride('_method'))
 
 //App Local Variable
 
