@@ -263,37 +263,27 @@ module.exports.create = async (req,res) => {
 }
 
 //[POST] /products/create
-module.exports.createPost = async (req,res) => {
 
-   
-    // console.log(req.file);
-
+module.exports.createPost = async (req, res) => {
+    
     if(req.file && req.file.filename) {
-        req.body.thumnail = `/uploads/${req.file.filename}`;
+      req.body.thumbnail = `/uploads/${req.file.filename}`;
     }
-
+  
     req.body.price = parseInt(req.body.price);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
     req.body.stock = parseInt(req.body.stock);
-    req.body.position = parseInt(req.body.position);
-
-
-    if(req.body.position){
-        req.body.position = parseInt(req.body.position);
+    if(req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    } else {
+      const countProducts = await Product.countDocuments({});
+      req.body.position = countProducts + 1;
     }
-    else {
-        const countProduct  = await Product.countDocuments(); 
-        req.body.position = countProduct + 1;    
-    }
-
-        
+    
     const newProduct = new Product(req.body);
     await newProduct.save();
-
-
     res.redirect(`/${systemConfig.prefixAdmin}/products`);
-}
-
+  }
 
 //[GET] /admin/products/edit/:id
 module.exports.edit = async (req,res) => {
@@ -356,8 +346,36 @@ module.exports.editPatch = async (req,res) => {
     }
     
     catch(error) {
-        res.flash("success","Id sản phẩm không hợp lệ");
+        res.flash("error","Id sản phẩm không hợp lệ");
     }
 
     res.redirect('back');
+}
+
+
+module.exports.detail = async (req,res) => {
+
+    try {
+        const id = req.params.id;
+
+        const product = await Product.findOne({
+            _id: id,
+            deleted: false
+        });
+
+        if(product) {
+            res.render("admin/pages/products/detail", {
+                pageTitle: "Chi tiết sản phẩm",
+                product: product
+            });
+        }
+
+        else {
+            res.redirect(`/${systemConfig.prefixAdmin}/products`);
+        }
+        
+    }
+    catch (error) {
+        res.redirect(`/${systemConfig.prefixAdmin}/products`);
+    }
 }

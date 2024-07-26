@@ -3,48 +3,42 @@ include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
-
-
 block main
-
-  
   h1(class="mb-4") Quản lý sản phẩm
 
-  a(class = "btn btn-primary" href="/admin/products/trash" role="button") Trang Thùng Rác 
+  a(
+    class = "btn btn-primary" 
+    href="/admin/products/trash" 
+    role="button"
+  ) Trang Thùng Rác
 
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
-    .card-body 
+    .card-body
       .row
         .col-6
-          +filter-status(filterStatus)  
+          +filter-status(filterStatus)
         .col-6
           +search(keyword)
-
-
   .card.mb-3
     .card-header Hành động
-    .card-body 
-      .input-group()
-        +box-actions(`/${prefixAdmin}/products/change-multi`)
-
+    .card-body
+      +box-actions(`/${prefixAdmin}/products/change-multi`)
   
-    
   .card.mb-3
-    .card-header Bộ lọc và Tìm kiếm
-    .card-body 
-
-      div(class = "text-right mb-2")
+    .card-header Danh sách
+    .card-body
+      div(class="text-right mb-2")
         a(
           href=`/${prefixAdmin}/products/create`
-          class ="btn btn-outline-success"
+          class="btn btn-outline-success"
         ) + Thêm mới
-
+      
       table.table.table-hover.table-sm
         thead
           tr
-            th 
-              input(name="checkall" type="checkbox")
+            th
+              input(name="checkAll" type="checkbox")
             th STT
             th Hình ảnh
             th Tiêu đề
@@ -52,58 +46,59 @@ block main
             th Vị trí
             th Trạng thái
             th Hành động
-
         tbody
-          each item,index in products
+          each item, index in products
             tr 
-              td 
+              td
                 input(
                   name="checkItem" 
                   type="checkbox"
-                  value= item.id
+                  value=item.id
                 )
               td #{index+1}
               td
                 img(
-                  src= item.thumnail
-                  alt= item.title
+                  src=item.thumbnail
+                  alt=item.title
                   width="80px"
                   height="auto"
                 )
               td #{item.title}
               td #{item.price}$
-              td 
+              td
                 input(
-                  link = `/${prefixAdmin}/products/changePosition/${item.id}` 
-                  type = "number"
-                  name = "position"
-                  value = item.position
+                  link=`/${prefixAdmin}/products/change-position/${item.id}`
+                  type="number"
+                  name="position"
+                  value=item.position
                   style="width: 60px"
-                  min = "1"
+                  min="1"
                 )
               td
                 if(item.status == "active")
                   button(
-                    link=`/${prefixAdmin}/products/change-status/inactive/${item.id}` 
+                    link=`/${prefixAdmin}/products/change-status/inactive/${item.id}`
                     class="badge badge-success"
                     button-change-status
                   ) Hoạt động
                 else
                   button(
-                    link=href=`/${prefixAdmin}/products/change-status/active/${item.id}`
+                    link=`/${prefixAdmin}/products/change-status/active/${item.id}`
                     class="badge badge-danger"
                     button-change-status
-                  ) Dừng hoạt động  
+                  ) Dừng hoạt động
               td
                 a(
-                  lass="btn btn-warning btn-sm"
+                  class="btn btn-info btn-sm"
+                  href=`/${prefixAdmin}/products/detail/${item.id}`
+                ) Chi tiết 
+
+                a(
+                  class="btn btn-warning btn-sm"
                   href=`/${prefixAdmin}/products/edit/${item.id}`
                 ) Sửa
                 button(
                   class="btn btn-danger btn-sm ml-1"
-                  button-delete= `/${prefixAdmin}/products/delete/${item.id}`
+                  button-delete=`/${prefixAdmin}/products/delete/${item.id}`
                 ) Xóa
-
-  
-  +pagination(pagination)  
-      
+  +pagination(pagination)
