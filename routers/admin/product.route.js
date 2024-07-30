@@ -7,7 +7,9 @@ const validate = require("../../validate/admin/product.validate");
 
 const storageMulterHelper = require('../../helpers/storageMulter.helper');
 
-const upload = multer({ storage: storageMulterHelper.storage }); 
+const upload = multer(); 
+
+const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware");
 
 router.get("/",controller.index);
 
@@ -29,7 +31,8 @@ router.get("/create",controller.create);
 
 router.post(
     "/create", 
-    upload.single('thumbnail'), // up anh vao thu muc upload
+    upload.single('thumbnail'),// up anh vao thu muc upload
+    uploadCloud.uploadSingle,
     validate.createPost,
     controller.createPost  
 );
@@ -39,6 +42,7 @@ router.get("/edit/:id",controller.edit);
 router.patch(
     "/edit/:id", 
     upload.single('thumbnail'), // up anh vao thu muc upload
+    uploadCloud.uploadSingle,
     validate.createPost,
     controller.editPatch
 );

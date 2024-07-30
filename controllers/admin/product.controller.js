@@ -53,6 +53,7 @@ module.exports.index = async (req,res) => {
         .sort({
         position: "desc"
         });
+
     // console.log(products);
 
     res.render("admin/pages/products/index", {
@@ -183,7 +184,7 @@ module.exports.trash = async (req,res) => {
         .limit(pagination.limitItems)
         .skip(pagination.skip);
 
-    console.log(products);
+    
 
     res.render("admin/pages/products/trash", {
         pageTitle: "Quản lí sản phẩm",
@@ -194,7 +195,7 @@ module.exports.trash = async (req,res) => {
     });
 }
 
-// [PATCH] /admin/products/restore/:id
+// [PATCH] /admin/products/trash/restore/:id
 module.exports.restoreItem = async (req,res) => {
 
     const id = req.params.id;
@@ -211,7 +212,7 @@ module.exports.restoreItem = async (req,res) => {
 
 }
 
-// [DELETE] /admin/products/delete/:id
+// [DELETE] /admin/products/trash/delete/:id
 module.exports.permanentlyDelete = async (req,res) => {
 
     const id = req.params.id;
@@ -266,10 +267,6 @@ module.exports.create = async (req,res) => {
 
 module.exports.createPost = async (req, res) => {
     
-    if(req.file && req.file.filename) {
-      req.body.thumbnail = `/uploads/${req.file.filename}`;
-    }
-  
     req.body.price = parseInt(req.body.price);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
     req.body.stock = parseInt(req.body.stock);
@@ -282,6 +279,7 @@ module.exports.createPost = async (req, res) => {
     
     const newProduct = new Product(req.body);
     await newProduct.save();
+    
     res.redirect(`/${systemConfig.prefixAdmin}/products`);
   }
 
@@ -319,10 +317,6 @@ module.exports.editPatch = async (req,res) => {
     try {
         const id = req.params.id;
     
-        if(req.file && req.file.filename) {
-            req.body.thumnail = `/uploads/${req.file.filename}`;
-        }
-    
         req.body.price = parseInt(req.body.price);
         req.body.discountPercentage = parseInt(req.body.discountPercentage);
         req.body.stock = parseInt(req.body.stock);
@@ -352,7 +346,7 @@ module.exports.editPatch = async (req,res) => {
     res.redirect('back');
 }
 
-
+// [GET] /admin/
 module.exports.detail = async (req,res) => {
 
     try {
