@@ -1,7 +1,19 @@
 extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/pagination.pug
 
 block main
   h1(class="mb-4") Danh mục sản phẩm
+
+  .card.mb-3
+    .card-header Bộ lọc và Tìm kiếm
+    .card-body
+      .row
+        .col-6
+          +filter-status(filterStatus)
+        .col-6
+          +search(keyword)
 
   .card.mb-3
     .card-header Danh sách
@@ -40,28 +52,29 @@ block main
               td #{item.title}
               td
                 input(
+                  link=`/${prefixAdmin}/products-category/change-position/${item.id}`
                   type="number"
                   value=item.position
                   style="width: 60px"
                   min="1"
-                  name="position"
+                  name="position-category"
                 )
               td
                 if (item.status === "active")
-                  a(
-                    href="javascript:;"
+                  button(
+                    link = `/${prefixAdmin}/products-category/change-status/inactive/${item.id}`
                     class="badge badge-success"
                     data-status="active"
                     data-id=item.id
-                    button-change-status
+                    button-change-status-category
                   ) Hoạt động
                 else
-                  a(
-                    href="javascript:;"
+                  button(
+                    link= `/${prefixAdmin}/products-category/change-status/active/${item.id}`
                     class="badge badge-danger"
                     data-status="inactive"
                     data-id=item.id
-                    button-change-status
+                    button-change-status-category
                   ) Dừng hoạt động
               td
                 a(
@@ -74,6 +87,7 @@ block main
                 ) Sửa
                 button(
                   class="btn btn-danger btn-sm ml-1"
-                  button-delete
+                  button-delete-category = `/${prefixAdmin}/products-category/delete/${item.id}`
                   data-id=item.id
                 ) Xóa
+    +pagination(pagination) 

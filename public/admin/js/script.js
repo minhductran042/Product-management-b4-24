@@ -263,6 +263,7 @@ if(listButtonFullyDelete.length > 0) {
 //End thung rac
 
 
+//Thay doi vi tri
 const listInputPosition = document.querySelectorAll("input[name='position']");
 if(listInputPosition.length > 0){
   listInputPosition.forEach(input => {
@@ -289,6 +290,8 @@ if(listInputPosition.length > 0){
     });
   });
 }
+
+//End thay doi vi tri
 
 
 //show-alert
@@ -367,3 +370,84 @@ if(sort) {
 //End Sort
 
 
+
+//ButtonChangeStatusCategory
+const listButtonChangeStatusCategory = document.querySelectorAll("[button-change-status-category]");
+if(listButtonChangeStatusCategory.length > 0) {
+  listButtonChangeStatusCategory.forEach(button => {
+    button.addEventListener("click", () => {
+      const link = button.getAttribute("link");
+      fetch(link, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.code == 200) {
+          window.location.reload();
+        }
+      })
+  });
+});
+}
+
+
+//End ButtonChangeStatusCategory
+
+
+//Xoa ban ghi Category
+const listButtonDeleteCategory = document.querySelectorAll("[button-delete-category]");
+if(listButtonDeleteCategory.length > 0) {
+  listButtonDeleteCategory.forEach(button => {
+    button.addEventListener("click", () => {
+      
+      // console.log(id);
+
+      const link = button.getAttribute("button-delete-category");
+
+      fetch(link, {
+        method: "PATCH"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+
+//End xoa ban ghi category
+
+
+//Vi tri Category
+const listInputPositionCategory = document.querySelectorAll("input[name='position-category']");
+if(listInputPositionCategory.length > 0){
+  listInputPositionCategory.forEach(input => {
+    input.addEventListener("change",() => {
+      const position = parseInt(input.value);
+      const link = input.getAttribute("link");
+      
+      fetch(link,{
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          position: position
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+        })
+    });
+  });
+}
+
+
+
+//End vi tri Category

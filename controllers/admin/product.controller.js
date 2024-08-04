@@ -42,7 +42,7 @@ module.exports.index = async (req,res) => {
 
 
     //Phan trang
-    const pagination = await paginationHelper(req, find); 
+    const pagination = await paginationHelper.paginationProduct(req, find);
     
     //Het Phan Trang
 
@@ -121,7 +121,7 @@ module.exports.changeMulti = async (req,res) => {
     });
    
 }
-// [DELETE] /admin/products/delete/:id
+// [PATCH] /admin/products/delete/:id
 module.exports.deleteItem = async (req,res) => {
     const id = req.params.id;
 
@@ -137,10 +137,6 @@ module.exports.deleteItem = async (req,res) => {
     });
 
 }
-
-
-
-
 
 
 // [GET] /admin/products/trash
@@ -181,7 +177,7 @@ module.exports.trash = async (req,res) => {
 
 
     //Phan trang
-    const pagination = await paginationHelper(req, find); 
+    const pagination = await paginationHelper.paginationProduct(req, find); 
     
     //Het Phan Trang
 
@@ -233,7 +229,7 @@ module.exports.permanentlyDelete = async (req,res) => {
 
 }
 
-
+// [PATCH] /products/changePosition/:id
 module.exports.changePosition = async (req,res) => {
 
     const id = req.params.id;
@@ -353,7 +349,7 @@ module.exports.editPatch = async (req,res) => {
     res.redirect('back');
 }
 
-// [GET] /admin/
+// [GET] /admin/products/detail/:id
 module.exports.detail = async (req,res) => {
 
     try {
