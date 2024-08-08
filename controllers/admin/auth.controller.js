@@ -12,37 +12,36 @@ module.exports.login = async (req,res) => {
 
 
 //[POST] /admin/auth/login
-module.exports.loginPost = async (req,res) => {
-
-    const {email , password } = req.body;
-    
+module.exports.loginPost = async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+  
     const account = await Account.findOne({
-        email: email,
-        deleted: false
+      email: email,
+      deleted: false
     });
-
-    if(!email) {
-        req.flash("error","Email không tồn tại trong hệ thống!");
-        res.redirect("back");
-        return;
+  
+    if(!account) {
+      req.flash("error", "Email không tồn tại trong hệ thống!");
+      res.redirect("back");
+      return;
     }
-
+  
     if(md5(password) != account.password) {
-        req.flash("error","Sai mật khẩu");
-        res.redirect("back");
-        return;
+      req.flash("error", "Sai mật khẩu!");
+      res.redirect("back");
+      return;
     }
-
+  
     if(account.status != "active") {
-        req.flash("error","Tài khoản đang bị khóa");
-        res.redirect("back");
-        return;
+      req.flash("error", "Tài khoản đang bị khóa!");
+      res.redirect("back");
+      return;
     }
-
-    res.cookie("token",account.token);
-
+  
+    res.cookie("token", account.token);
     res.redirect(`/${systemConfig.prefixAdmin}/dashboard`);
-}
+  }
 
 //[GET] /admin/auth/logout
 module.exports.logout = async (req,res) => {

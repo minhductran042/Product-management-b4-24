@@ -5,12 +5,17 @@ const accountRouter = require("./account.route");
 const authRouter = require("./auth.route");
 const systemConfig = require("../../config/system");
 
+const authMiddleware = require("../../middlewares/admin/auth.middleware"); 
 
 const productCategoryRouter = require("./product-category.route");
 module.exports.index = (app) => {
 
    const path = `/${systemConfig.prefixAdmin}`;
-   app.use(`${path}/dashboard`, dashboardRouter);
+   app.use(
+      `${path}/dashboard`,
+      authMiddleware.requireAuth,
+       dashboardRouter
+   );
    app.use(`${path}/products`,productRouter);
    app.use(`${path}/products-category`,productCategoryRouter);
    app.use(`${path}/roles`,roleRouter);
