@@ -14,11 +14,23 @@ module.exports.index = (app) => {
    app.use(
       `${path}/dashboard`,
       authMiddleware.requireAuth,
-       dashboardRouter
+      dashboardRouter
    );
-   app.use(`${path}/products`,productRouter);
-   app.use(`${path}/products-category`,productCategoryRouter);
-   app.use(`${path}/roles`,roleRouter);
+   app.use(
+      `${path}/products`,
+      authMiddleware.requireAuth,
+      productRouter
+   );
+   app.use(
+      `${path}/products-category`,
+      authMiddleware.requireAuth,
+      productCategoryRouter
+   );
+   app.use(
+      `${path}/roles`,
+      authMiddleware.requireAuth,
+      roleRouter
+   );
    app.use(`${path}/accounts`,accountRouter);
    app.use(`${path}/auth`,authRouter);
 }
