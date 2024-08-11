@@ -31,6 +31,9 @@ module.exports.index = (app) => {
       authMiddleware.requireAuth,
       roleRouter
    );
-   app.use(`${path}/accounts`,accountRouter);
+   app.use(`${path}/accounts`,
+      authMiddleware.requireAuth,
+      accountRouter
+   );
    app.use(`${path}/auth`,authRouter);
 }

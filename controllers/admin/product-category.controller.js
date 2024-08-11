@@ -77,36 +77,46 @@ module.exports.create = async (req,res) => {
 // [POST] /admin/products-category/create
 module.exports.createPost = async (req,res) => {
 
-    if(req.body.position) {
-      req.body.position = parseInt(req.body.position);
+    if(res.locals.permissions.includes("products-category_create")) {
+        if(req.body.position) {
+            req.body.position = parseInt(req.body.position);
+          } else {
+            const countCategory = await ProductCategory.countDocuments({});
+            req.body.position = countCategory + 1;
+          }
+          
+          const newCategory = new ProductCategory(req.body);
+          await newCategory.save();
+          
+          res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
     } else {
-      const countCategory = await ProductCategory.countDocuments({});
-      req.body.position = countCategory + 1;
+        res.send(`403`);
     }
-    
-    const newCategory = new ProductCategory(req.body);
-    await newCategory.save();
-    
-    res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+
 }
 
 
 // [PATH] /admin/products-category/changeStatus/:statusChange/:id
 
 module.exports.changeStatus = async (req,res) => {
-    const { id, statusChange } = req.params;
-    await  ProductCategory.updateOne( 
-    {
-        _id: id
-    }, {
-        status: statusChange
-    });
-
-    req.flash('success','Cập nhật trạng thái thành công');
-
-    res.json({
-        code: 200 // backend trả về code 200 
-    });
+    if(res.locals.role.permissions.includes("products-category_edit")) {
+        const { id, statusChange } = req.params;
+        await  ProductCategory.updateOne( 
+        {
+            _id: id
+        }, {
+            status: statusChange
+        });
+    
+        req.flash('success','Cập nhật trạng thái thành công');
+    
+        res.json({
+            code: 200 // backend trả về code 200 
+        });
+    }
+    else {
+        res.send(`403`);
+    }
    
 }
 
@@ -116,18 +126,24 @@ module.exports.changeStatus = async (req,res) => {
 // [PATCH] /admin/products-category/delete/:id
 
 module.exports.deleteItem = async (req,res) => {
-    const id = req.params.id;
 
-   await ProductCategory.updateOne({
-    _id: id
-   }, {
-    deleted: true
-   });
+    if(res.locals.role.permissions.includes("products-category_delete")) {
+        const id = req.params.id;
 
-   req.flash('success','Xóa sản phẩm thành công');
-    res.json({
-        code: 200
-    });
+        await ProductCategory.updateOne({
+         _id: id
+        }, {
+         deleted: true
+        });
+     
+        req.flash('success','Xóa sản phẩm thành công');
+         res.json({
+             code: 200
+         });
+    }
+    else {
+        res.send(`403`);
+    }
 
 }
 
@@ -165,26 +181,32 @@ module.exports.detail = async (req,res) => {
 
 module.exports.changePosition = async (req,res) => {
 
-    const id = req.params.id;
+    if(res.locals.role.permissions.includes("products-category_edit")) {
+        const id = req.params.id;
 
-    // await Product.deleteOne({
-    //  _id: id
-    // });
+        // await Product.deleteOne({
+        //  _id: id
+        // });
 
-    const position = req.body.position;
+        const position = req.body.position;
 
-    // console.log(id);
-    // console.log(position);
+        // console.log(id);
+        // console.log(position);
 
-    await ProductCategory.updateOne({
-        _id: id
-    }, {
-        position: position
-    })
- 
-     res.json({
-         code: 200
-     });
+        await ProductCategory.updateOne({
+            _id: id
+        }, {
+            position: position
+        })
+    
+        res.json({
+            code: 200
+        });
+    }
+    else { 
+        res.send(`403`);
+    }
+    
  
 };
 
@@ -224,29 +246,123 @@ module.exports.edit = async (req,res) => {
 
 module.exports.editPatch = async (req,res) => {
 
-    try{
-        const id = req.params.id;
-
-        if(req.body.position) {
-            req.body.position = parseInt(req.body.position);
-        } else {
-            const countCagegory = await ProductCategory.countDocuments({});
-            req.body.position = countCagegory + 1;
+    if(res.locals.role.permissions.includes("products-category_edit")) {
+        try{
+            const id = req.params.id;
+    
+            if(req.body.position) {
+                req.body.position = parseInt(req.body.position);
+            } else {
+                const countCagegory = await ProductCategory.countDocuments({});
+                req.body.position = countCagegory + 1;
+            }
+    
+            await ProductCategory.updateOne({
+                _id: id,
+                deleted: false
+            }, req.body);
+    
+            req.flash("success", "Cập nhật danh mục thành công!");
+    
+            res.redirect(`back`);
         }
-
-        await ProductCategory.updateOne({
-            _id: id,
-            deleted: false
-        }, req.body);
-
-        req.flash("success", "Cập nhật danh mục thành công!");
-
-        res.redirect(`back`);
-    }
-
-    catch(error) { 
-        res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+    
+        catch(error) { 
+            res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+        }
+    } else {
+        res.send(`403`);
     }
 
     
+
+    
+}
+
+
+//[GET] /admin/products-category/trash
+module.exports.trash = async (req,res) => {
+
+    const find = {
+        deleted: true,
+    }
+    // find.status = "active";
+
+    const filterStatus = [
+        {
+            label: "Tất cả",
+            value: ""
+        }, 
+        {
+            label: "Hoạt động",
+            value: "active"
+        },
+        {
+            label: "Dừng hoạt động",
+            value: "inactive"
+        }
+    ];
+
+
+    if(req.query.status){ 
+        find.status = req.query.status;
+    }
+
+    let keyword = "";
+    if(req.query.keyword){
+        const regex = new RegExp(req.query.keyword,"i");
+        find.title = regex;
+        keyword = req.query.keyword;
+    }
+
+    const pagination = await paginationHelper.paginationCategory(req, find);
+
+
+    const records = await ProductCategory
+        .find(find)
+        .limit(pagination.limitItems)
+        .skip(pagination.skip)
+        .sort({
+            position: "asc"
+        });
+
+    res.render("admin/pages/products-category/trash", {
+        pageTitle: "Trang thùng rác",
+        filterStatus: filterStatus,
+        records: records,
+        pagination: pagination,
+    });
+}
+
+
+// [PATCH] /admin/products-category/trash/restore/:id
+module.exports.restoreItem = async (req,res) => {
+
+    const id = req.params.id;
+
+   await ProductCategory.updateOne({
+    _id: id
+   }, {
+    deleted: false
+   });
+
+    res.json({
+        code: 200
+    });
+
+}
+
+// [DELETE] /admin/products-category/trash/delete/:id
+module.exports.permanentlyDelete = async (req,res) => {
+
+    const id = req.params.id;
+
+   await ProductCategory.deleteOne({
+    _id: id
+   });
+
+    res.json({
+        code: 200
+    });
+
 }

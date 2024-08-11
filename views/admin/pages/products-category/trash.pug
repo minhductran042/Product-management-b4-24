@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
 
 block main
+
   h1(class="mb-4") #{pageTitle}
 
   .card.mb-3
@@ -33,12 +34,11 @@ block main
             th STT
             th Hình ảnh
             th Tiêu đề
-            th Giá
             th Trạng thái
             th Hành động
 
         tbody
-          each item, index in products
+          each item, index in records
             tr
               td
                 input(
@@ -54,28 +54,27 @@ block main
                   height="auto"
                 )
               td #{item.title}
-              td #{item.price}$
               td
                 if(item.status == "active")
                   button(
-                    link=`/${prefixAdmin}/products/change-status/inactive/${item.id}`
+                    link=`/${prefixAdmin}/products-category/change-status/inactive/${item.id}`
                     class="badge badge-success"
                     button-change-status
                     ) Hoạt động
                 else
                   button(
-                    link=`/${prefixAdmin}/products/change-status/active/${item.id}`
+                    link=`/${prefixAdmin}/products-category/change-status/active/${item.id}`
                     class="badge badge-danger"
                     button-change-status
                     ) Dừng hoạt động
               td
                 button(
                     class="btn btn-warning btn-sm"
-                    button-restore=item.id
+                    button-restore-category=item.id
                 ) Khôi phục
                 button(
                   class="btn btn-danger btn-sm ml-1"
-                  button-permanently-delete=item.id
+                  button-permanently-delete-category=item.id
                 ) Xóa vĩnh viễn
 
   +pagination(pagination)

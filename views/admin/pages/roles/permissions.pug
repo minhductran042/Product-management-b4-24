@@ -179,8 +179,8 @@ block main
               input(
                 type="checkbox" 
                 data-id=item.id 
-                data-name="account_view"
-                checked= (item.permissions.includes("account_view") ? true : false)
+                data-name="accounts_view"
+                checked= (item.permissions.includes("accounts_view") ? true : false)
               )
         tr
           td Thêm mới
@@ -189,8 +189,8 @@ block main
               input(
                 type="checkbox" 
                 data-id=item.id
-                data-name="account_create"
-                checked= (item.permissions.includes("account_create") ? true : false)
+                data-name="accounts_create"
+                checked= (item.permissions.includes("accounts_create") ? true : false)
               )
         tr
           td Chỉnh sửa
@@ -199,8 +199,8 @@ block main
               input(
                 type="checkbox" 
                 data-id=item.id
-                data-name="account_edit"
-                checked= (item.permissions.includes("account_edit") ? true : false)
+                data-name="accounts_edit"
+                checked= (item.permissions.includes("accounts_edit") ? true : false)
               )
         tr
           td Xóa
@@ -209,7 +209,7 @@ block main
               input(
                 type="checkbox" 
                 data-id=item.id
-                data-name="account_delete"
-                checked= (item.permissions.includes("account_delete") ? true : false)
+                data-name="accounts_delete"
+                checked= (item.permissions.includes("accounts_delete") ? true : false)
               )
         

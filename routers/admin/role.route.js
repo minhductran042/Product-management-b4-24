@@ -16,4 +16,15 @@ router.get("/permissions", controller.permissions);
 
 router.patch("/permissions", controller.permissionsPatch);
 
+router.get("/detail/:id",controller.detail);
+
+router.get("/trash",controller.trash);
+
+router.patch("/delete/:id",controller.deleteItem);
+
+router.patch("/restore/:id",controller.restoreItem);
+
+router.delete("/permanentlyDelete/:id",controller.permanentlyDelete);
+
+
 module.exports = router;

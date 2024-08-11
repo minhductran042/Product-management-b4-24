@@ -1,0 +1,8 @@
+extends ../../layouts/default.pug
+
+block main
+  if (role.title)
+    h1(class="mb-4") #{role.title}
+
+  if (role.description)
+    div(class="mb-4") !{role.description} 

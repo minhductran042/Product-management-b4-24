@@ -28,6 +28,12 @@ router.patch("/change-position/:id", controller.changePosition);
 
 router.get("/edit/:id", controller.edit);
 
+router.get("/trash",controller.trash);
+
+router.patch("/restore/:id",controller.restoreItem);
+
+router.delete("/permanentlyDelete/:id",controller.permanentlyDelete);
+
 router.patch(
   "/edit/:id", 
   upload.single('thumbnail'),

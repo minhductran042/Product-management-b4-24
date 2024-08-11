@@ -113,3 +113,97 @@ module.exports.permissionsPatch = async (req, res) => {
       message: "Cập nhật thành công!"
     });
 };
+
+// [GET] /admin/roles/detail/:id
+module.exports.detail = async (req,res) => {
+
+    try {
+        const id = req.params.id;
+
+        const role = await Role.findOne({
+            _id: id,
+            deleted: false
+        });
+
+        if(role) {
+            res.render("admin/pages/roles/detail", {
+                pageTitle: "Chi tiết nhóm quyền",
+                role: role
+            });
+        }
+
+        else {
+            res.redirect(`/${systemConfig.prefixAdmin}/roles`);
+        }
+        
+    }
+    catch (error) {
+        res.redirect(`/${systemConfig.prefixAdmin}/roles`);
+    }
+}
+
+
+// [GET] /admin/roles/trash
+
+module.exports.trash = async (req,res) => {
+
+    const find = {
+        deleted: true
+    }
+
+    const records = await Role.find(find);
+
+    res.render("admin/pages/roles/trash", {
+        pageTitle: "Trang thùng rác",
+        records: records
+    });
+}
+
+// [PATCH] /admin/roles/delete/:id
+module.exports.deleteItem = async (req,res) => {
+    const id = req.params.id;
+
+   await Role.updateOne({
+    _id: id
+   }, {
+    deleted: true
+   });
+
+   req.flash('success','Xóa sản phẩm thành công');
+    res.json({
+        code: 200
+    });
+
+}
+
+
+module.exports.restoreItem = async (req,res) => {
+
+    const id = req.params.id;
+
+   await Role.updateOne({
+    _id: id
+   }, {
+    deleted: false
+   });
+
+    res.json({
+        code: 200
+    });
+
+}
+
+// [DELETE] /admin/products/trash/delete/:id
+module.exports.permanentlyDelete = async (req,res) => {
+
+    const id = req.params.id;
+
+   await Role.deleteOne({
+    _id: id
+   });
+
+    res.json({
+        code: 200
+    });
+
+}

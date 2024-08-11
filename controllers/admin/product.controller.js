@@ -160,6 +160,7 @@ module.exports.deleteItem = async (req,res) => {
 
 // [GET] /admin/products/trash
 module.exports.trash = async (req,res) => {
+    
     const find = {
         deleted: true,
     }
@@ -208,7 +209,7 @@ module.exports.trash = async (req,res) => {
     
 
     res.render("admin/pages/products/trash", {
-        pageTitle: "Quản lí sản phẩm",
+        pageTitle: "Trang thùng rác",
         products: products,
         keyword: keyword,
         filterStatus : filterStatus,
@@ -307,6 +308,8 @@ module.exports.createPost = async (req, res) => {
             const countProducts = await Product.countDocuments({});
             req.body.position = countProducts + 1;
         }
+
+        req.body.createdBy = res.locals.account.id;
         
         const newProduct = new Product(req.body);
         await newProduct.save();

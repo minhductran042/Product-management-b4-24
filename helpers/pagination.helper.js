@@ -1,5 +1,6 @@
 const Product = require("../models/product.model");
 const ProductCategory = require("../models/product-category.model");
+const Account = require("../models/accounts.model");
 
 module.exports.paginationProduct = async (req, find) => {
   const pagination = {
@@ -34,6 +35,26 @@ module.exports.paginationCategory = async (req, find) => {
 
   const countCategory = await ProductCategory.countDocuments(find);
   const totalPage = Math.ceil(countCategory/pagination.limitItems);
+  pagination.totalPage = totalPage;
+
+  return pagination;
+}
+
+
+module.exports.paginationAccount = async (req, find) => {
+  const pagination = {
+    currentPage: 1,
+    limitItems: 4
+  };
+
+  if(req.query.page) {
+    pagination.currentPage = parseInt(req.query.page);
+  }
+
+  pagination.skip = (pagination.currentPage - 1) * pagination.limitItems;
+
+  const countAccounts = await Account.countDocuments(find);
+  const totalPage = Math.ceil(countAccounts/pagination.limitItems);
   pagination.totalPage = totalPage;
 
   return pagination;

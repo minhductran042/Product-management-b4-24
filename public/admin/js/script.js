@@ -222,7 +222,6 @@ if(listButtonRestore.length > 0) {
     button.addEventListener("click", () => {
       const id = button.getAttribute("button-restore");
       
-
       fetch(`/admin/products/restore/${id}`, {
         method: "PATCH"
       })
@@ -423,6 +422,52 @@ if(listButtonDeleteCategory.length > 0) {
 //End xoa ban ghi category
 
 
+
+//Khoi phuc ban ghi category
+const listButtonRestoreCategory = document.querySelectorAll("[button-restore-category]");
+if(listButtonRestoreCategory.length > 0) {
+  listButtonRestoreCategory.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-restore-category");
+      
+      fetch(`/admin/products-category/restore/${id}`, {
+        method: "PATCH"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+  //End khoi phuc ban ghi Category
+
+
+
+  //Xoa vinh Vien Category
+const listButtonFullyDeleteCategory = document.querySelectorAll("[button-permanently-delete-category]");
+if(listButtonFullyDeleteCategory.length > 0) {
+  listButtonFullyDeleteCategory.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-permanently-delete-category");
+
+      fetch(`/admin/products-category/permanentlyDelete/${id}`, {
+        method: "DELETE"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+  //End xóa vĩnh viễn Category
+
+
 //Vi tri Category
 const listInputPositionCategory = document.querySelectorAll("input[name='position-category']");
 if(listInputPositionCategory.length > 0){
@@ -449,6 +494,79 @@ if(listInputPositionCategory.length > 0){
 }
 
 //End vi tri Category
+
+
+
+//Xoa ban ghi Nhom quyen
+const listButtonDeleteRole = document.querySelectorAll("[button-delete-role]");
+if(listButtonDeleteRole.length > 0) {
+  listButtonDeleteRole.forEach(button => {
+    button.addEventListener("click", () => {
+      
+      // console.log(id);
+
+      const link = button.getAttribute("button-delete-category");
+
+      fetch(link, {
+        method: "PATCH"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+//End xoa ban ghi Nhom quyen
+
+
+//Khoi phuc ban ghi Nhom quyen
+const listButtonRestoreRole = document.querySelectorAll("[button-restore-role]");
+if(listButtonRestoreRole.length > 0) {
+  listButtonRestoreRole.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-restore-role");
+      
+      fetch(`/admin/roles/restore/${id}`, {
+        method: "PATCH"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+  //End khoi phuc ban ghi Nhom quyen
+
+
+  //Xoa vinh Vien nhom quyen
+const listButtonFullyDeleteRole = document.querySelectorAll("[button-permanently-delete-role]");
+if(listButtonFullyDeleteRole.length > 0) {
+  listButtonFullyDeleteRole.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-permanently-delete-role");
+
+      fetch(`/admin/roles/permanentlyDelete/${id}`, {
+        method: "DELETE"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+  //End xóa vĩnh viễn nhom quyen
+
+
+
 
 
 //Phân quyền
@@ -500,3 +618,7 @@ if(tablePermissions) {
 }
 
 //End Phân quyền
+
+
+
+
