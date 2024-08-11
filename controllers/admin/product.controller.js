@@ -91,6 +91,7 @@ module.exports.index = async (req,res) => {
         }
 
         item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+
     }
 
     // console.log(products);
@@ -175,7 +176,8 @@ module.exports.deleteItem = async (req,res) => {
         await Product.updateOne({
             _id: id
         }, {
-            deleted: true
+            deleted: true,
+            deletedBy: res.locals.account.id
         });
 
         req.flash('success','Xóa sản phẩm thành công');
