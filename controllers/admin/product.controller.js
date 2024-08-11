@@ -1,8 +1,10 @@
 const Product = require("../../models/product.model");
+const Account = require("../../models/accounts.model");
 const ProductCategory = require("../../models/product-category.model");
 const paginationHelper = require("../../helpers/pagination.helper");
 const systemConfig = require("../../config/system");
 const createTreeHelper = require("../../helpers/createTree.helper");
+const moment = require('moment');
 
 
 // [GET] /admin/products/
@@ -61,6 +63,35 @@ module.exports.index = async (req,res) => {
         .limit(pagination.limitItems)
         .skip(pagination.skip)
         .sort(sort);
+
+    for (const item of products) {
+        //Nguoi tao
+        if(item.createdBy) {
+            const accountCreated = await Account.findOne({
+            _id: item.createdBy
+            });
+            item.createdByFullName = accountCreated.fullName;
+        } else {
+            item.createdByFullName = "";
+        }
+
+        item.createdAtFormat = moment(item.createdAt).format("DD/MM/YY HH:mm:ss");
+
+
+        //Nguoi cap nhat
+
+        if(item.updatedBy) {
+            const accountUpdated = await Account.findOne({
+                _id: item.updatedBy
+            });
+            item.updatedByFullName = accountUpdated.fullName;
+
+        } else {
+            item.UpdatedByFullName = "";
+        }
+
+        item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+    }
 
     // console.log(products);
 
@@ -310,7 +341,7 @@ module.exports.createPost = async (req, res) => {
         }
 
         req.body.createdBy = res.locals.account.id;
-        
+
         const newProduct = new Product(req.body);
         await newProduct.save();
         
@@ -379,6 +410,8 @@ module.exports.editPatch = async (req,res) => {
                 const countProduct  = await Product.countDocuments(); 
                 req.body.position = countProduct + 1;    
             }
+
+            req.body.updatedBy = res.locals.account.id;
         
             await Product.updateOne({
                 _id:id,
