@@ -3,6 +3,8 @@ const ProductCategory = require("../../models/product-category.model");
 const systemConfig = require("../../config/system");
 const paginationHelper = require("../../helpers/pagination.helper");
 const createTreeHelper = require("../../helpers/createTree.helper");
+const Account = require("../../models/accounts.model");
+const moment = require("moment");
 
 module.exports.index = async (req,res) => {
 
@@ -44,8 +46,35 @@ module.exports.index = async (req,res) => {
         .limit(pagination.limitItems)
         .skip(pagination.skip)
         .sort({
-            position: "asc"
+            position: "desc"
         });
+
+    for (const item of records) {
+        //Tao boi 
+        if(item.createdBy) {
+            const accountCreated = await Account.findOne({
+                _id: item.createdBy
+            })
+            item.createdByFullName = accountCreated.fullName;
+        } else{
+            item.createdByFullName = "";
+        }
+        item.createdAtFormat = moment(item.createdAt).format("DD/MM/YY HH:mm:ss");
+
+        //Cập nhật
+        if(item.updatedBy) {
+            const accountUpdated = await Account.findOne({
+                _id: item.updatedBy
+            })
+            item.updatedByFullName = accountUpdated.fullName;
+        } else{
+            item.updatedByFullName = "";
+        }
+        item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+
+    }
+
+    
 
     res.render("admin/pages/products-category/index", {
         pageTitle: "Trang danh mục sản phẩm",
@@ -77,14 +106,14 @@ module.exports.create = async (req,res) => {
 // [POST] /admin/products-category/create
 module.exports.createPost = async (req,res) => {
 
-    if(res.locals.permissions.includes("products-category_create")) {
+    if(res.locals.role.permissions.includes("products-category_create")) {
         if(req.body.position) {
             req.body.position = parseInt(req.body.position);
           } else {
             const countCategory = await ProductCategory.countDocuments({});
             req.body.position = countCategory + 1;
           }
-          
+          req.body.createdBy = res.locals.account.id;
           const newCategory = new ProductCategory(req.body);
           await newCategory.save();
           
@@ -133,7 +162,8 @@ module.exports.deleteItem = async (req,res) => {
         await ProductCategory.updateOne({
          _id: id
         }, {
-         deleted: true
+         deleted: true,
+         deletedBy: res.locals.account.id
         });
      
         req.flash('success','Xóa sản phẩm thành công');
@@ -256,6 +286,8 @@ module.exports.editPatch = async (req,res) => {
                 const countCagegory = await ProductCategory.countDocuments({});
                 req.body.position = countCagegory + 1;
             }
+
+            req.body.updatedBy = res.locals.account.id;
     
             await ProductCategory.updateOne({
                 _id: id,
@@ -325,6 +357,21 @@ module.exports.trash = async (req,res) => {
         .sort({
             position: "asc"
         });
+
+
+    for (const item of records) {
+        //Nguoi tao
+        if(item.deletedBy) {
+            const accountDeleted = await Account.findOne({
+                _id: item.deletedBy
+            });
+            item.deletedByFullName = accountDeleted.fullName;
+        } else {
+            item.deletedByFullName = "";
+        }
+
+        item.deletedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+    }
 
     res.render("admin/pages/products-category/trash", {
         pageTitle: "Trang thùng rác",

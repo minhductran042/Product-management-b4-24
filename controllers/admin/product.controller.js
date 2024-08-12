@@ -239,6 +239,19 @@ module.exports.trash = async (req,res) => {
         .limit(pagination.limitItems)
         .skip(pagination.skip);
 
+        for (const item of products) {
+            //Nguoi tao
+            if(item.deletedBy) {
+                const accountDeleted = await Account.findOne({
+                    _id: item.deletedBy
+                });
+                item.deletedByFullName = accountDeleted.fullName;
+            } else {
+                item.deletedByFullName = "";
+            }
+    
+            item.deletedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+        }
     
 
     res.render("admin/pages/products/trash", {

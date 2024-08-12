@@ -566,9 +566,6 @@ if(listButtonFullyDeleteRole.length > 0) {
   //End xóa vĩnh viễn nhom quyen
 
 
-
-
-
 //Phân quyền
 const tablePermissions = document.querySelector("[table-permissions]");
 if(tablePermissions) {
@@ -621,4 +618,70 @@ if(tablePermissions) {
 
 
 
+//Xoa ban ghi tai khoan
+const listButtonDeleteAccount = document.querySelectorAll("[button-delete-account]");
+if(listButtonDeleteAccount.length > 0) {
+  listButtonDeleteAccount.forEach(button => {
+    button.addEventListener("click", () => {
+      // console.log(id);
+      const link = button.getAttribute("button-delete-account");
+      // console.log(link);
+      fetch(link, {
+        method: "PATCH"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
 
+//End xoa ban ghi tai khoan
+
+
+
+//Khoi phuc ban ghi tai khoan
+const listButtonRestoreAccount = document.querySelectorAll("[button-restore-account]");
+if(listButtonRestoreAccount.length > 0) {
+  listButtonRestoreAccount.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-restore-account");
+      
+      fetch(`/admin/accounts/restore/${id}`, {
+        method: "PATCH"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+  //End khoi phuc ban ghi tai khoan
+
+
+  //Xoa vinh Vien tai khoan
+const listButtonFullyDeleteAccount = document.querySelectorAll("[button-permanently-delete-account]");
+if(listButtonFullyDeleteAccount.length > 0) {
+  listButtonFullyDeleteAccount.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-permanently-delete-account");
+
+      fetch(`/admin/accounts/permanentlyDelete/${id}`, {
+        method: "DELETE"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+  //End xóa vĩnh viễn tai khoan

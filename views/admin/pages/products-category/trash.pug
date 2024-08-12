@@ -35,6 +35,7 @@ block main
             th Hình ảnh
             th Tiêu đề
             th Trạng thái
+            th Xóa bởi 
             th Hành động
 
         tbody
@@ -67,6 +68,10 @@ block main
                     class="badge badge-danger"
                     button-change-status
                     ) Dừng hoạt động
+              td 
+                  div #{item.deletedByFullName}
+                  div #{item.deletedAtFormat}
+
               td
                 button(
                     class="btn btn-warning btn-sm"

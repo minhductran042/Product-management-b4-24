@@ -46,6 +46,8 @@ block main
                 th Vị trí
               if(role.permissions.includes("products-category_edit"))
                 th Trạng thái
+              th Tạo bởi 
+              th Cập nhật 
               th Hành động
 
           tbody
@@ -87,6 +89,14 @@ block main
                         data-id=item.id
                         button-change-status-category
                       ) Dừng hoạt động
+                td 
+                  div #{item.createdByFullName}
+                  div #{item.createdAtFormat}
+                
+                td 
+                  div #{item.updatedByFullName}
+                  div #{item.updatedAtFormat}
+                  
                 td
                   a(
                     class="btn btn-secondary btn-sm"

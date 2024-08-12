@@ -18,7 +18,7 @@ block main
   p 
     span Trạng thái: 
     span
-      <b>#{account.status === "active" ? "Hoạt động": "Dừng hoạt động"}</b>
+      <b>#{account.status === "active" ? "Hoạt động" : "Dừng hoạt động"}</b>
 
   if (role.title)
     p Phân quyền: <b>#{role.title}</b>
