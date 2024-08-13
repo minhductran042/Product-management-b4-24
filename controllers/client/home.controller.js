@@ -13,7 +13,7 @@ module.exports.index = async (req,res) => {
     .limit(6)
     .select("-description"); // lay ra tat ca tru truong description
     
-    console.log(productsFeatured);
+    // console.log(productsFeatured);
 
     for(const item of productsFeatured){
         item.priceNew = (item.price * 
