@@ -98,7 +98,7 @@ module.exports.index = async (req,res) => {
     });
 }
 
-// [GET] /admin/acoount/create
+// [GET] /admin/account/create
 module.exports.create = async (req,res) => {
 
     const roles = await Role.find({
