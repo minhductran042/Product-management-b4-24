@@ -1,5 +1,16 @@
 // Cap nhat so luong san pham trong gio hang
 
+const showAlert = document.querySelector("[show-alert]");
+if(showAlert) {
+  let time = showAlert.getAttribute("show-alert") || 3000;
+  time = parseInt(time);
+
+  setTimeout(() => {
+    showAlert.classList.add("hidden");
+  }, time);
+}
+
+
 const listInputQuantity = document.querySelectorAll("[cart] input[name='quantity']");
 if(listInputQuantity.length > 0) {
   listInputQuantity.forEach(input => {
