@@ -25,3 +25,15 @@ if(listInputQuantity.length > 0) {
   });
 }
 // End Cap nhat so luong san pham trong gio hang
+
+
+document.addEventListener("click", () => {
+  const togglePassword = document.getElementById('toggle-password');
+  const passwordInput = document.getElementById('password');
+
+  togglePassword.addEventListener('click', function() {
+      // Toggle password visibility
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+  })
+});
