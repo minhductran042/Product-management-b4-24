@@ -28,10 +28,8 @@ const server = createServer(app);
 
 const { Server } = require('socket.io');
 const io = new Server(server); // khởi tạo socket tổng bên phía server
+global._io = io;
 
-io.on("connection",(socket) => { // on : lắng nghe xem người nào kết nối đến server ko
-    console.log('Có 1 người dùng kết nối',socket.id);
-});
 
 //end SocketIO
 

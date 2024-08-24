@@ -23,6 +23,6 @@ module.exports.index = (app) => {
    app.use("/cart",cartRouter);
    app.use("/checkout",checkoutRouter);
    app.use("/user",userRouter);
-   app.use("/chat",chatRouter);
+   app.use("/chat",userMiddleware.requireAuth,chatRouter);
    
 }
