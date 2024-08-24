@@ -11,7 +11,7 @@ module.exports.cartId = async (req, res, next) => {
       "cartId", 
       cart.id, 
       { 
-        expires: new Date(Date.now() + expires)
+        expires: new Date(Date.now() + expires),
       });
   } else {
     const cart = await Cart.findOne({

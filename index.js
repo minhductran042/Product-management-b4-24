@@ -1,4 +1,6 @@
 const express = require('express');
+const { createServer } = require('node:http');
+const { join } = require('node:path');
 
 require('dotenv').config();
 
@@ -21,6 +23,17 @@ database.connect();
 const app = express();
 const port = process.env.PORT;
 
+//SocketIO
+const server = createServer(app);
+
+const { Server } = require('socket.io');
+const io = new Server(server); // khởi tạo socket tổng bên phía server
+
+io.on("connection",(socket) => { // on : lắng nghe xem người nào kết nối đến server ko
+    console.log('Có 1 người dùng kết nối',socket.id);
+});
+
+//end SocketIO
 
 app.set("views",`${__dirname}/views`);
 app.set("view engine","pug");
@@ -53,7 +66,13 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin;
 routeClient.index(app);
 routeAdmin.index(app);
 
-app.listen(port, () => {
+app.get("*", (req,res) => {
+    res.render("client/pages/errors/404", {
+        pageTitle:"Trang 404",
+    })
+});
+
+server.listen(port, () => {
     console.log(`App listening on port ${port}`);
 });
 
