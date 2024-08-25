@@ -1,11 +1,46 @@
+const Chat = require("../../models/chat.model");
+const User = require("../../models/user.model");
+
 // [GET] /chat/
+
 module.exports.index = async (req, res) => {
+  const userId = res.locals.user.id;
+  const fullName = res.locals.user.fullName;
+  // SocketIO
+  _io.once("connection", (socket) => {
+    // CLIENT_SEND_MESSAGE
+    socket.on("CLIENT_SEND_MESSAGE", async (data) => {
+      const chatData = {
+        userId: userId,
+        content: data.content
+      };
+      // Lưu data vào database
 
-    _io.on("connection",(socket) => { // on : lắng nghe xem người nào kết nối đến server ko
-        console.log('Có 1 người dùng kết nối',socket.id);
-    });
+      const chat = new Chat(chatData);
+      await chat.save();
 
-    res.render("client/pages/chat/index", {
-      pageTitle: "Chat",
+      // Trả tin nhắn realtime về cho mọi người (Làm sau)
+      _io.emit("SERVER_RETURN_MESSAGE", {
+        userId: userId,
+        fullName: fullName,
+        content: data.content
+      })
+    })
+  });
+
+  // End SocketIO
+  const chats = await Chat.find({});
+  for (const chat of chats) {
+    const infoUser = await User.findOne({
+      _id: chat.userId
     });
-  };
+    chat.fullName = infoUser.fullName;
+  }
+
+  
+  res.render("client/pages/chat/index", {
+    pageTitle: "Chat",
+    chats: chats
+  });
+
+};
