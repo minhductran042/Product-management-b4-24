@@ -1,6 +1,6 @@
 const express = require('express');
-const { createServer } = require('node:http');
-const { join } = require('node:path');
+const http = require('http');
+const { Server } = require("socket.io");
 
 require('dotenv').config();
 
@@ -24,9 +24,7 @@ const app = express();
 const port = process.env.PORT;
 
 //SocketIO
-const server = createServer(app);
-
-const { Server } = require('socket.io');
+const server = http.createServer(app);
 const io = new Server(server); // khởi tạo socket tổng bên phía server
 global._io = io;
 
