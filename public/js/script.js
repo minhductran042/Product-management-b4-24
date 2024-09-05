@@ -1,4 +1,5 @@
-// Cap nhat so luong san pham trong gio hang
+var socket = io();
+
 
 const showAlert = document.querySelector("[show-alert]");
 if(showAlert) {
@@ -10,7 +11,7 @@ if(showAlert) {
   }, time);
 }
 
-
+// Cap nhat so luong san pham trong gio hang
 const listInputQuantity = document.querySelectorAll("[cart] input[name='quantity']");
 if(listInputQuantity.length > 0) {
   listInputQuantity.forEach(input => {

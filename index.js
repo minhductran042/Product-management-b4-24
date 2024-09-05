@@ -62,6 +62,7 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin;
 routeClient.index(app);
 routeAdmin.index(app);
 
+
 app.get("*", (req,res) => {
     res.render("client/pages/errors/404", {
         pageTitle:"Trang 404",
