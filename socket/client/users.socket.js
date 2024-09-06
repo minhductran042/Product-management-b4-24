@@ -49,11 +49,11 @@ module.exports = (req,res) => {
                 _id: userIdB
               });
         
-              socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+            socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
                 length: infoB.acceptFriends.length,
                 userId: userIdB
-              });
-        })
+            });
+    })
         //End khi A gui yeu cau cho B
 
 
@@ -82,14 +82,23 @@ module.exports = (req,res) => {
             });
     
             if(existUserBInA) {
-            await User.updateOne({
-                _id: userIdA
-            }, {
-                $pull: {
-                    requestFriends: userIdB
-                }
-            });
+                await User.updateOne({
+                    _id: userIdA
+                }, {
+                    $pull: {
+                        requestFriends: userIdB
+                    }
+                });
             }
+
+            const infoB = await User.findOne({
+                _id: userIdB
+              });
+        
+            socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+                length: infoB.acceptFriends.length,
+                userId: userIdB
+            });
     
         })
         // Hết Chức năng hủy gửi yêu cầu
