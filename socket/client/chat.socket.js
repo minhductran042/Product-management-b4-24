@@ -5,6 +5,7 @@ module.exports = (req,res) => {
 
     const userId = res.locals.user.id;
     const fullName = res.locals.user.fullName;
+    const roomChatId = req.params.roomChatId;
 
     _io.once("connection", (socket) => {
 
@@ -13,7 +14,8 @@ module.exports = (req,res) => {
         socket.on("CLIENT_SEND_MESSAGE", async (data) => {
             const chatData = {
             userId: userId,
-            content: data.content
+            content: data.content,
+            // roomChatId: roomChatId
         };
             const linkImages = [];
 
