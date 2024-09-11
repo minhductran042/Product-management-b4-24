@@ -1,4 +1,5 @@
 const User = require("../../models/user.model");
+const RoomChat = require("../../models/rooms-chat.model");
 
 module.exports = (req,res) => {
 
@@ -162,51 +163,73 @@ module.exports = (req,res) => {
         //Chuc nang chap nhan ket ban
         socket.on("CLIENT_ACCEPT_FRIEND", async (userIdB) => {
 
-            // Them {id,roomChatId} của B trong FriendList của A
-            // Xoa id cua B trong acceptFriends cua A
-            const existUserBInA = await User.findOne({
-                _id: userIdA,
-                acceptFriends: userIdB
-            });
-    
-            if(existUserBInA) {
-                await User.updateOne({
-                    _id: userIdA
-                }, {
-                    $push: {
-                        friendList: {
-                            userId: userIdB,
-                            roomChatId: ""
-                        }
-                    },
-                    $pull: {
-                        acceptFriends: userIdB
-                    }
-                });
-            }
-    
-            // Them {id,roomChatId} của A trong FriendList của B
-            //Xoa id cua A trong requestFriends cua B
-            const existUserAInB = await User.findOne({
-                _id: userIdB,
-                requestFriends: userIdA
-            });
-    
-            if(existUserAInB) {
-                await User.updateOne({
-                    _id: userIdB
-                }, {
-                    $push: {
-                        friendList: {
+            try {
+                //Tao moi phong chat chung
+                const roomChat = new RoomChat({
+                    typeRoom: "friend",
+                    users: [
+                        {
                             userId: userIdA,
-                            roomChatId: ""
+                            role: "superAdmin"
+                        }, 
+                        {
+                            userId: userIdB,
+                            role: "superAdmin"
                         }
-                    },
-                    $pull: {
-                        requestFriends: userIdA
-                    }
+                    ],
                 });
+                await roomChat.save();
+
+                // Them {id,roomChatId} của B trong FriendList của A
+                // Xoa id cua B trong acceptFriends cua A
+                const existUserBInA = await User.findOne({
+                    _id: userIdA,
+                    acceptFriends: userIdB
+                });
+        
+                if(existUserBInA) {
+                    await User.updateOne({
+                        _id: userIdA
+                    }, {
+                        $push: {
+                            friendList: {
+                                userId: userIdB,
+                                roomChatId: roomChat.id
+                            }
+                        },
+                        $pull: {
+                            acceptFriends: userIdB
+                        }
+                    });
+                }
+        
+                // Them {id,roomChatId} của A trong FriendList của B
+                //Xoa id cua A trong requestFriends cua B
+                const existUserAInB = await User.findOne({
+                    _id: userIdB,
+                    requestFriends: userIdA
+                });
+        
+                if(existUserAInB) {
+                    await User.updateOne({
+                        _id: userIdB
+                    }, {
+                        $push: {
+                            friendList: {
+                                userId: userIdA,
+                                roomChatId: roomChat.id
+                            }
+                        },
+                        $pull: {
+                            requestFriends: userIdA
+                        }
+                    });
+                }
+            } catch(e) {
+                console.log(e);
             }
+
+            
     
         })
 

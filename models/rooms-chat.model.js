@@ -20,6 +20,6 @@ const roomChatSchema = new mongoose.Schema({
 
 });
 
-const RoomChat = mongoose.model("RoomChat", cartSchema, "rooms-chat");
+const RoomChat = mongoose.model("RoomChat", roomChatSchema, "rooms-chat");
 
 module.exports = RoomChat;

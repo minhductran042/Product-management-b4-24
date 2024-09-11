@@ -106,12 +106,17 @@ module.exports.friends = async (req, res) => {
 
     const friendListId = friendList.map(item => item.userId);
     
-  
     const users = await User.find({
       _id: { $in: friendListId },
       status: "active",
       deleted: false
     }).select("id avatar fullName statusOnline");
+
+    users.forEach(user => {
+      const infoUser = friendList.find(friend => friend.userId == user.id);
+      user.roomChatId = infoUser.roomChatId;
+    })
+
     
     res.render("client/pages/users/friends", {
         pageTitle: "Danh sách bạn bè",
