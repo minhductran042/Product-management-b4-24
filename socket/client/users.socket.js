@@ -164,22 +164,23 @@ module.exports = (req,res) => {
         socket.on("CLIENT_ACCEPT_FRIEND", async (userIdB) => {
 
             try {
-                //Tao moi phong chat chung
+                
+                // Tạo phòng chat chung
                 const roomChat = new RoomChat({
                     typeRoom: "friend",
                     users: [
-                        {
-                            userId: userIdA,
-                            role: "superAdmin"
-                        }, 
-                        {
-                            userId: userIdB,
-                            role: "superAdmin"
-                        }
+                    {
+                        userId: userIdA,
+                        role: "superAdmin"
+                    },
+                    {
+                        userId: userIdB,
+                        role: "superAdmin"
+                    }
                     ],
                 });
+        
                 await roomChat.save();
-
                 // Them {id,roomChatId} của B trong FriendList của A
                 // Xoa id cua B trong acceptFriends cua A
                 const existUserBInA = await User.findOne({
