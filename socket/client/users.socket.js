@@ -193,7 +193,7 @@ module.exports = (req,res) => {
                         _id: userIdA
                     }, {
                         $push: {
-                            friendList: {
+                            friendsList: {
                                 userId: userIdB,
                                 roomChatId: roomChat.id
                             }
@@ -216,7 +216,7 @@ module.exports = (req,res) => {
                         _id: userIdB
                     }, {
                         $push: {
-                            friendList: {
+                            friendsList: {
                                 userId: userIdA,
                                 roomChatId: roomChat.id
                             }

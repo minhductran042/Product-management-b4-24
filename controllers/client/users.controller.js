@@ -14,9 +14,9 @@ module.exports.notFriend = async (req, res) => {
 
   const requestFriends = res.locals.user.requestFriends;
   const acceptFriends = res.locals.user.acceptFriends;
-  const friendList = res.locals.user.friendList;
+  const friendsList = res.locals.user.friendsList;
 
-  const friendListId = friendList.map(item => item.userId);
+  const friendListId = friendsList.map(item => item.userId);
 
   const users = await User.find({
     $and: [
@@ -102,7 +102,7 @@ module.exports.friends = async (req, res) => {
     // $ne: not equal
     // $nin: not in
     
-    const friendsList = res.locals.user.friendList;
+    const friendsList = res.locals.user.friendsList;
 
     const friendListId = friendsList.map(item => item.userId);
     
